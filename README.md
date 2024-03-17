@@ -1,1 +1,1 @@
-# Emails Manager
+# Email Manager
