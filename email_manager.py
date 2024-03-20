@@ -13,6 +13,12 @@ def home_page() -> None:
 def templates_page() -> None:
   st.markdown('# Templates')
 
+  st.button('Add template', on_click=change_page, args=('add_template',))
+
+def add_template_page() -> None:
+  template_name = st.text_input('Template name:')
+  template_text = st.text_area('Write the template text:', height=600)
+
 def email_list_page() -> None:
   st.markdown('# Email List')
 
@@ -31,6 +37,8 @@ def main() -> None:
     home_page()
   elif st.session_state.email_manager_page == 'templates':
     templates_page()
+  elif st.session_state.email_manager_page == 'add_template':
+    add_template_page()
   elif st.session_state.email_manager_page == 'email_list':
     email_list_page()
   elif st.session_state.email_manager_page == 'settings':
