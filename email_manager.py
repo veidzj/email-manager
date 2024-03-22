@@ -54,6 +54,16 @@ def edit_template(name):
 
 def email_list_page():
   st.markdown('# Email List')
+  st.divider()
+
+  for file in email_list_folder.glob('*.txt'):
+    file_name = file.stem.replace('_', ' ').upper()
+    col1, col2, col3 = st.columns([0.6, 0.2, 0.2])
+    col1.button(file_name, key=f'{file_name}', use_container_width=True)
+    col2.button('EDIT', key=f'edit_{file_name}', use_container_width=True, on_click=edit_template, args=(file_name,))
+    col3.button('DELETE', key=f'delete_{file_name}', use_container_width=True, on_click=delete_list, args=(file_name,))
+
+  st.divider()
   st.button('Add List', on_click=change_page, args=('add_list',))
 
 def add_list_page():
@@ -67,6 +77,10 @@ def save_list(name, text):
   with open(email_list_folder / file_name, 'w', encoding='utf-8') as file:
     file.write(text)
   change_page('email_list')
+
+def delete_list(name):
+  file_name = name.replace(' ', '_').lower() + '.txt'
+  (email_list_folder / file_name).unlink()
 
 def settings_page():
   st.markdown('# Settings')
