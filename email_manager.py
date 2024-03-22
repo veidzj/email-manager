@@ -2,7 +2,7 @@ from pathlib import Path
 import streamlit as st
 
 current_folder = Path(__file__).parent
-templates_foler = current_folder / 'templates'
+templates_folder = current_folder / 'templates'
 email_list_folder = current_folder / 'email_list'
 
 if not 'email_manager_page' in st.session_state:
@@ -25,9 +25,9 @@ def add_template_page():
   st.button('Save', on_click=save_template, args=(template_name, template_text))
 
 def save_template(name, text):
-  templates_foler.mkdir(exist_ok=True)
+  templates_folder.mkdir(exist_ok=True)
   file_name = name.replace(' ', '_').lower() + '.txt'
-  with open(templates_foler / file_name, 'w', encoding='utf-8') as file:
+  with open(templates_folder / file_name, 'w', encoding='utf-8') as file:
     file.write(text)
   change_page('templates')
 
