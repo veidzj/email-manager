@@ -23,7 +23,7 @@ def templates_page():
     col1, col2, col3 = st.columns([0.6, 0.2, 0.2])
     col1.button(file_name, key=f'{file_name}', use_container_width=True)
     col2.button('EDIT', key=f'edit_{file_name}', use_container_width=True)
-    col3.button('DELETE', key=f'delete_{file_name}', use_container_width=True)
+    col3.button('DELETE', key=f'delete_{file_name}', use_container_width=True, on_click=delete_template, args=(file_name,))
 
   st.divider()
   st.button('Add template', on_click=change_page, args=('add_template',))
@@ -39,6 +39,10 @@ def save_template(name, text):
   with open(templates_folder / file_name, 'w', encoding='utf-8') as file:
     file.write(text)
   change_page('templates')
+
+def delete_template(name):
+  file_name = name.replace(' ', '_').lower() + '.txt'
+  (templates_folder / file_name).unlink()
 
 def email_list_page():
   st.markdown('# Email List')
