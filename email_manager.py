@@ -60,15 +60,15 @@ def email_list_page():
     file_name = file.stem.replace('_', ' ').upper()
     col1, col2, col3 = st.columns([0.6, 0.2, 0.2])
     col1.button(file_name, key=f'{file_name}', use_container_width=True)
-    col2.button('EDIT', key=f'edit_{file_name}', use_container_width=True, on_click=edit_template, args=(file_name,))
+    col2.button('EDIT', key=f'edit_{file_name}', use_container_width=True, on_click=edit_list, args=(file_name,))
     col3.button('DELETE', key=f'delete_{file_name}', use_container_width=True, on_click=delete_list, args=(file_name,))
 
   st.divider()
   st.button('Add List', on_click=change_page, args=('add_list',))
 
-def add_list_page():
-  list_name = st.text_input('List name:')
-  list_emails = st.text_area('Write the emails separated by commas:', height=600)
+def add_list_page(list_name='', list_emails=''):
+  list_name = st.text_input('List name:', value=list_name)
+  list_emails = st.text_area('Write the emails separated by commas:', value=list_emails, height=600)
   st.button('Save', on_click=save_list, args=(list_name, list_emails))
 
 def save_list(name, text):
@@ -81,6 +81,14 @@ def save_list(name, text):
 def delete_list(name):
   file_name = name.replace(' ', '_').lower() + '.txt'
   (email_list_folder / file_name).unlink()
+
+def edit_list(name):
+  file_name = name.replace(' ', '_').lower() + '.txt'
+  with open(email_list_folder / file_name) as file:
+    file_text = file.read()
+  st.session_state.list_name_edit = name
+  st.session_state.list_text_edit = file_text
+  change_page('edit_list')
 
 def settings_page():
   st.markdown('# Settings')
@@ -107,6 +115,10 @@ def main():
     email_list_page()
   elif st.session_state.email_manager_page == 'add_list':
     add_list_page()
+  elif st.session_state.email_manager_page == 'edit_list':
+    list_name_edit = st.session_state.list_name_edit
+    list_text_edit = st.session_state.list_text_edit
+    add_list_page(list_name_edit, list_text_edit)
   elif st.session_state.email_manager_page == 'settings':
     settings_page()
 
