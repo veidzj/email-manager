@@ -5,14 +5,36 @@ current_folder = Path(__file__).parent
 templates_folder = current_folder / 'templates'
 email_list_folder = current_folder / 'email_list'
 
-if not 'email_manager_page' in st.session_state:
-  st.session_state.email_manager_page = 'home'
+def init():  
+  if not 'email_manager_page' in st.session_state:
+    st.session_state.email_manager_page = 'home'
+  if not 'current_addressees' in st.session_state:
+    st.session_state.current_addressees = ''
+  if not 'current_title' in st.session_state:
+    st.session_state.current_title = ''
+  if not 'current_body' in st.session_state:
+    st.session_state.current_body = ''
 
 def change_page(page_name: str):
   st.session_state.email_manager_page = page_name
 
 def home_page():
   st.markdown('# Email Manager')
+
+  current_addressees = st.session_state.current_addressees
+  current_title = st.session_state.current_title
+  current_body = st.session_state.current_body
+
+  addressees = st.text_input('Email addressees:', value=current_addressees)
+  title = st.text_input('Email title', value=current_title)
+  body = st.text_area('Email body', value=current_body, height=400)
+  col1, _, col3 = st.columns(3)
+  col1.button('Send email', use_container_width=True)
+  col3.button('Clear', use_container_width=True)
+
+  st.session_state.current_addressees = addressees
+  st.session_state.current_title = title
+  st.session_state.current_body = body
 
 def templates_page():
   st.markdown('# Templates')
@@ -96,6 +118,8 @@ def settings_page():
 
 
 def main():
+  init()
+
   st.sidebar.button('Email Manager', use_container_width=True, on_click=change_page, args=('home',))
   st.sidebar.button('Templates', use_container_width=True, on_click=change_page, args=('templates',))
   st.sidebar.button('Email List', use_container_width=True, on_click=change_page, args=('email_list',))
