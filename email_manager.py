@@ -48,7 +48,7 @@ def templates_page():
   for file in templates_folder.glob('*.txt'):
     file_name = file.stem.replace('_', ' ').upper()
     col1, col2, col3 = st.columns([0.6, 0.2, 0.2])
-    col1.button(file_name, key=f'{file_name}', use_container_width=True)
+    col1.button(file_name, key=f'{file_name}', use_container_width=True, on_click=use_template, args=(file_name,))
     col2.button('EDIT', key=f'edit_{file_name}', use_container_width=True, on_click=edit_template, args=(file_name,))
     col3.button('DELETE', key=f'delete_{file_name}', use_container_width=True, on_click=delete_template, args=(file_name,))
 
@@ -66,6 +66,13 @@ def save_template(name, text):
   with open(templates_folder / file_name, 'w', encoding='utf-8') as file:
     file.write(text)
   change_page('templates')
+
+def use_template(name):
+  file_name = name.replace(' ', '_').lower() + '.txt'
+  with open(templates_folder / file_name) as file:
+    file_text = file.read()
+  st.session_state.current_body = file_text
+  change_page('home')
 
 def delete_template(name):
   file_name = name.replace(' ', '_').lower() + '.txt'
