@@ -70,4 +70,5 @@ def main():
   elif st.session_state.email_manager_page == 'settings':
     settings_page()
 
-main()
+if __name__ == '__main__':
+  main()
