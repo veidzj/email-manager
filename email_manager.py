@@ -1,6 +1,9 @@
 from pathlib import Path
 import streamlit as st
 from utils import *
+from templates_page import templates_page, add_template_page
+from email_list_page import email_list_page, add_list_page
+from settings_page import settings_page, read_email, read_email_key
 
 def home_page():
   st.markdown('# Email Manager')
@@ -37,38 +40,6 @@ def send_email_home(addressees, title, body):
     st.error('Add your email key in the settings page')
   else:
     send_email(user_email, addressees, title, body, app_password)
-
-def settings_page():
-  st.markdown('# Settings')
-
-  email = st.text_input('Write your email:')
-  st.button('Save', key='save_email', on_click=save_email, args=(email,))
-  key = st.text_input('Write your email key:')
-  st.button('Save', key='save_keyl', on_click=save_email_key, args=(key,))
-
-def save_email(email):
-  settings_folder.mkdir(exist_ok=True)
-  with open(settings_folder / 'user_email.txt', 'w') as file:
-    file.write(email)
-
-def save_email_key(key):
-  settings_folder.mkdir(exist_ok=True)
-  with open(settings_folder / 'user_email_key.txt', 'w') as file:
-    file.write(key)
-
-def read_email():
-  settings_folder.mkdir(exist_ok=True)
-  if (settings_folder / 'user_email.txt').exists():
-    with open(settings_folder / 'user_email_key.txt', 'r') as file:
-      return file.read()
-  return ''
-
-def read_email_key():
-  settings_folder.mkdir(exist_ok=True)
-  if (settings_folder / 'user_email_key.txt').exists():
-    with open(settings_folder / 'user_email_key.txt', 'r') as file:
-      return file.read()
-  return ''
 
 def main():
   init()
