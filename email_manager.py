@@ -1,24 +1,6 @@
 from pathlib import Path
 import streamlit as st
-from utils import send_email
-
-current_folder = Path(__file__).parent
-templates_folder = current_folder / 'templates'
-email_list_folder = current_folder / 'email_list'
-settings_folder = current_folder / 'settings'
-
-def init():
-  if not 'email_manager_page' in st.session_state:
-    st.session_state.email_manager_page = 'home'
-  if not 'current_addressees' in st.session_state:
-    st.session_state.current_addressees = ''
-  if not 'current_title' in st.session_state:
-    st.session_state.current_title = ''
-  if not 'current_body' in st.session_state:
-    st.session_state.current_body = ''
-
-def change_page(page_name: str):
-  st.session_state.email_manager_page = page_name
+from utils import *
 
 def home_page():
   st.markdown('# Email Manager')
