@@ -1,5 +1,7 @@
+import os
 from pathlib import Path
 import streamlit as st
+from utils import send_email
 
 current_folder = Path(__file__).parent
 templates_folder = current_folder / 'templates'
@@ -29,7 +31,7 @@ def home_page():
   title = st.text_input('Email title:', value=current_title)
   body = st.text_area('Email body:', value=current_body, height=400)
   col1, _, col3 = st.columns(3)
-  col1.button('Send email', use_container_width=True)
+  col1.button('Send email', use_container_width=True, on_click=send_email_home, args=(addressees, title, body))
   col3.button('Clear', use_container_width=True, on_click=clear_home)
 
   st.session_state.current_addressees = addressees
@@ -40,6 +42,13 @@ def clear_home():
   st.session_state.current_addressees = ''
   st.session_state.current_title = ''
   st.session_state.current_body = ''
+
+def send_email_home(addressees, title, body):
+  user_email = st.secrets['USER_EMAIL']
+  app_password = st.secrets['APP_PASSWORD']
+  print(user_email)
+  print(app_password)
+  send_email(user_email, addressees, title, body, app_password)
 
 def templates_page():
   st.markdown('# Templates')
