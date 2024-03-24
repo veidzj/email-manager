@@ -44,11 +44,17 @@ def clear_home():
   st.session_state.current_body = ''
 
 def send_email_home(addressees, title, body):
-  user_email = st.secrets['USER_EMAIL']
-  app_password = st.secrets['APP_PASSWORD']
-  print(user_email)
-  print(app_password)
-  send_email(user_email, addressees, title, body, app_password)
+  # user_email = st.secrets['USER_EMAIL']
+  # app_password = st.secrets['APP_PASSWORD']
+  addressees = addressees.replace(' ', '').split(',')
+  user_email = read_email()
+  app_password = read_email_key()
+  if user_email == '':
+    st.error('Add your email in the settings page')
+  elif app_password == '':
+    st.error('Add your email key in the settings page')
+  else:
+    send_email(user_email, addressees, title, body, app_password)
 
 def templates_page():
   st.markdown('# Templates')
@@ -157,6 +163,20 @@ def save_email_key(key):
   settings_folder.mkdir(exist_ok=True)
   with open(settings_folder / 'user_email_key.txt', 'w') as file:
     file.write(key)
+
+def read_email():
+  settings_folder.mkdir(exist_ok=True)
+  if (settings_folder / 'user_email.txt').exists():
+    with open(settings_folder / 'user_email_key.txt', 'r') as file:
+      return file.read()
+  return ''
+
+def read_email_key():
+  settings_folder.mkdir(exist_ok=True)
+  if (settings_folder / 'user_email_key.txt').exists():
+    with open(settings_folder / 'user_email_key.txt', 'r') as file:
+      return file.read()
+  return ''
 
 def main():
   init()
