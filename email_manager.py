@@ -30,11 +30,16 @@ def home_page():
   body = st.text_area('Email body:', value=current_body, height=400)
   col1, _, col3 = st.columns(3)
   col1.button('Send email', use_container_width=True)
-  col3.button('Clear', use_container_width=True)
+  col3.button('Clear', use_container_width=True, on_click=clear_home)
 
   st.session_state.current_addressees = addressees
   st.session_state.current_title = title
   st.session_state.current_body = body
+
+def clear_home():
+  st.session_state.current_addressees = ''
+  st.session_state.current_title = ''
+  st.session_state.current_body = ''
 
 def templates_page():
   st.markdown('# Templates')
